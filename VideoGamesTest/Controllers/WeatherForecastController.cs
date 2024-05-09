@@ -8,11 +8,7 @@ namespace VideoGamesTest.Controllers
     [Route("/weather")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
+        
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly ApplicationDbContext _context;
 
@@ -23,17 +19,6 @@ namespace VideoGamesTest.Controllers
             _context = context;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
 
         [HttpGet("genre")]
         public Task<List<Genre>> GetGenre()
@@ -64,11 +49,55 @@ namespace VideoGamesTest.Controllers
             return task;
         }
 
-        /*[HttpGet("publisher")]
+        [HttpGet("publisher")]
         public Task<List<Publisher>> GetPublisher()
         {
-            var task = _context.publisher.Include( publisher => publisher.).ToListAsync();
+            var task = _context.publisher
+                .Where(e => e.id < 10)
+                .Include(e => e.gamePublishers)
+                .ToListAsync();
             return task;
-        }*/
+        }
+
+        [HttpGet("Platform")]
+        public Task<List<Platform>> GetPlatform()
+        {
+            var task = _context.platform.ToListAsync();
+            return task;
+        }
+
+        [HttpGet("GamePlatform")]
+        public Task<List<GamePlatform>> GetGamePlatform()
+        {
+            var task = _context.game_platform
+                .Where( gp => gp.id < 10)
+                .Include(game_platform => game_platform.platform)
+                .Include(game_platform => game_platform.gamePublisher)
+                .Include(game_platform => game_platform.regionSales)
+                .ToListAsync();
+            return task;
+        }
+
+        [HttpGet("Region")]
+        public Task<List<Region>> GetRegions()
+        {
+            var task = _context.region.Where(e=>e.id<10).Include(region => region.regionSales).ToListAsync();
+            return task;
+        }
+
+        [HttpGet("RegionSales")]
+        public Task<List<RegionSales>> GetRegionSales()
+        {
+            var task = _context.region_sales.Include(rs => rs.GamePlatform).Include(rs => rs.Region).ToListAsync();
+            return task;
+        }
+
+        [HttpGet("getroutedata/{page}/{user}")]
+        public List<string> GetString([FromRoute] int? page, [FromRoute] int user, [FromBody] string someData)
+        {
+            var a = new List<string>() { $"page:{page}, user: {user}, someData: {someData}", "" };
+            return a;
+        }
+
     }
 }
