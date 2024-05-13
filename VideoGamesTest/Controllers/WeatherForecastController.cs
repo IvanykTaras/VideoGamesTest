@@ -1,8 +1,11 @@
+
+using ApplicationCore.Interface;
+using Domain.Model;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using VideoGamesTest.Models;
 
-namespace VideoGamesTest.Controllers
+namespace WebApi.Controllers
 {
     [ApiController]
     [Route("/weather")]
@@ -11,12 +14,18 @@ namespace VideoGamesTest.Controllers
         
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IVideoGameRepository _repository;
 
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger,ApplicationDbContext context)
+        public WeatherForecastController(
+            ILogger<WeatherForecastController> logger,
+            ApplicationDbContext context,
+            IVideoGameRepository repository
+            )
         {
             _logger = logger;
             _context = context;
+            _repository = repository;
         }
 
 
@@ -26,6 +35,29 @@ namespace VideoGamesTest.Controllers
             Task<List<Genre>> task = _context.genre.Include(genre => genre.games).ToListAsync();
             return task;
         }
+
+        [HttpGet("genre/{genreId}")]
+        public Task<Genre> FindGenre(int genreId)
+        {
+            var task = _context.genre.Where( g => g.id == genreId).Include(genre => genre.games).FirstAsync();
+            return task;
+        }
+
+        /*source.Skip(startIndex).Take(pageSize)*/
+        [HttpGet("genre/page/{page}")]
+        public Task<List<Genre>> FindGenrePage(int page)
+        {
+            int pageSize = 10;
+            int calcPageSize = ( page - 1 ) * pageSize;
+            var task = _context.genre
+                .Skip(calcPageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return task;
+        }
+
+
 
         [HttpGet("game")]
         public Task<List<Game>> GetGame()
@@ -92,12 +124,13 @@ namespace VideoGamesTest.Controllers
             return task;
         }
 
-        [HttpGet("getroutedata/{page}/{user}")]
-        public List<string> GetString([FromRoute] int? page, [FromRoute] int user, [FromBody] string someData)
+        [HttpGet("repo")]
+        public Task<List<RegionSales>> /*Task<Genre> */ GetString()
         {
-            var a = new List<string>() { $"page:{page}, user: {user}, someData: {someData}", "" };
-            return a;
+            return _repository.FindRegionSalesPage(0, 10);
         }
+
+
 
     }
 }

@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Reflection.Metadata;
-using VideoGamesTest.Models;
+﻿
+using Domain.Model;
+using Microsoft.EntityFrameworkCore;
 
-namespace VideoGamesTest
+
+namespace Infrastructure
 {
     public class ApplicationDbContext : DbContext
     {
@@ -13,8 +13,7 @@ namespace VideoGamesTest
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*modelBuilder.Entity<RegionSales>(entity => entity.HasAlternateKey(x => x.region_id));*/
-
+            /*source.Skip(startIndex).Take(pageSize)*/
 
             //
             // Genre - Game 1:m  relation 
@@ -74,7 +73,7 @@ namespace VideoGamesTest
 
             //
             // GamePlatform - regionSales 1:m  relation 
-            // 700 000
+            // 
 
 
             modelBuilder.Entity<RegionSales>()
@@ -85,14 +84,10 @@ namespace VideoGamesTest
             //
             // Region - regionSales 1:m  relation 
             //
-
-            
             modelBuilder.Entity<RegionSales>()
                 .HasOne(regionSales => regionSales.Region)
                 .WithMany(region => region.regionSales)
                 .HasForeignKey(regionSales => regionSales.region_id);
-                
-
         }
 
         public DbSet<Genre> genre { get; set; }

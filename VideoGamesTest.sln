@@ -5,7 +5,13 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoGamesTest", "VideoGamesTest\VideoGamesTest.csproj", "{57947DF6-00A5-4787-86DE-82D9626039CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{7DF5EBD8-A9DB-406C-909E-9397C546E2F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{7DF5EBD8-A9DB-406C-909E-9397C546E2F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{E8B68C23-8A20-4270-A68A-010F366083EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{B2D67C3B-3617-4829-B207-F88F22374020}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{FEACF20A-FC68-4D8F-8584-83092309C297}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{7DF5EBD8-A9DB-406C-909E-9397C546E2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DF5EBD8-A9DB-406C-909E-9397C546E2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DF5EBD8-A9DB-406C-909E-9397C546E2F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8B68C23-8A20-4270-A68A-010F366083EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8B68C23-8A20-4270-A68A-010F366083EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8B68C23-8A20-4270-A68A-010F366083EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8B68C23-8A20-4270-A68A-010F366083EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D67C3B-3617-4829-B207-F88F22374020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D67C3B-3617-4829-B207-F88F22374020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D67C3B-3617-4829-B207-F88F22374020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D67C3B-3617-4829-B207-F88F22374020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEACF20A-FC68-4D8F-8584-83092309C297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEACF20A-FC68-4D8F-8584-83092309C297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEACF20A-FC68-4D8F-8584-83092309C297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEACF20A-FC68-4D8F-8584-83092309C297}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

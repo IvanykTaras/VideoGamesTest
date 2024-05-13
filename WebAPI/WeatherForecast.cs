@@ -1,4 +1,4 @@
-namespace VideoGamesTest
+namespace WebAPI
 {
     public class WeatherForecast
     {

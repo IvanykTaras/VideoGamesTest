@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Model
+namespace Domain.Model
 {
-    public class Region
+    public class Genre
     {
         public int id { get; set; }
-        public string region_name { get; set; }
-        public ICollection<RegionSales> regionSales { get; set; }
+        public string genre_name { get; set; }
+        public ICollection<Game> games { get; set; }
     }
 }

@@ -1,6 +1,7 @@
+using ApplicationCore.Interface;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using VideoGamesTest;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,13 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddDbContext<ApplicationDbContext>( options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("PSQL"));
 });
 
+builder.Services.AddTransient<IVideoGameRepository, VideoGameRepository>();
 
 
 var app = builder.Build();
