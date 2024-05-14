@@ -1,5 +1,4 @@
-﻿
-using Domain.Model;
+﻿using ApplicationCore.Model;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -12,7 +11,7 @@ namespace Infrastructure
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
             /*source.Skip(startIndex).Take(pageSize)*/
 
             //
@@ -21,8 +20,8 @@ namespace Infrastructure
             modelBuilder.Entity<Genre>()
                 .HasMany(genre => genre.games)
                 .WithOne(game => game.genre)
-                .HasForeignKey(game => game.genre_id)
-                .HasPrincipalKey(genre => genre.id);
+                .HasForeignKey(game => game.genre_id);
+            /*.HasPrincipalKey(genre => genre.id);*/
 
             //
             // Game - Game publisher 1:m  relation 
@@ -30,8 +29,8 @@ namespace Infrastructure
             modelBuilder.Entity<Game>()
                 .HasMany(game => game.gamePublishers)
                 .WithOne(gamePublisher => gamePublisher.game)
-                .HasForeignKey(gamePublisher => gamePublisher.game_id)
-                .HasPrincipalKey(game => game.id);
+                .HasForeignKey(gamePublisher => gamePublisher.game_id);
+            /*.HasPrincipalKey(game => game.id);*/
 
             //
             // Publisher - Game Publisher 1:m  relation 
@@ -39,8 +38,8 @@ namespace Infrastructure
             modelBuilder.Entity<Publisher>()
                 .HasMany(publisher => publisher.gamePublishers)
                 .WithOne(gamePublisher => gamePublisher.publisher)
-                .HasForeignKey(gamePublisher => gamePublisher.publisher_id)
-                .HasPrincipalKey(publisher => publisher.id);
+                .HasForeignKey(gamePublisher => gamePublisher.publisher_id);
+            /*.HasPrincipalKey(publisher => publisher.id);*/
 
 
 
@@ -52,8 +51,8 @@ namespace Infrastructure
             modelBuilder.Entity<GamePublisher>()
                 .HasMany(gamePublisher => gamePublisher.gamePlatforms)
                 .WithOne(gamePlatform => gamePlatform.gamePublisher)
-                .HasForeignKey(gamePlatform => gamePlatform.game_publisher_id)
-                .HasPrincipalKey(gamePublisher => gamePublisher.id);
+                .HasForeignKey(gamePlatform => gamePlatform.game_publisher_id);
+            /*.HasPrincipalKey(gamePublisher => gamePublisher.id);*/
 
             //
             // Platform - gamePlatform 1:m  relation 
@@ -61,34 +60,27 @@ namespace Infrastructure
             modelBuilder.Entity<Platform>()
                 .HasMany(platform => platform.gamePlatforms)
                 .WithOne(gamePlatform => gamePlatform.platform)
-                .HasForeignKey(gamePlatform => gamePlatform.platform_id)
-                .HasPrincipalKey(platform => platform.id);
+                .HasForeignKey(gamePlatform => gamePlatform.platform_id);
+                
 
 
 
 
 
-            modelBuilder.Entity<RegionSales>()
-                .HasKey(rs => new { rs.region_id, rs.game_platform_id });
 
-            //
-            // GamePlatform - regionSales 1:m  relation 
-            // 
-
-
-            modelBuilder.Entity<RegionSales>()
-                .HasOne(regionSales => regionSales.GamePlatform)
-                .WithMany(gamePlatform => gamePlatform.regionSales)
-                .HasForeignKey(regionSales => regionSales.game_platform_id);
-
-            //
-            // Region - regionSales 1:m  relation 
-            //
-            modelBuilder.Entity<RegionSales>()
-                .HasOne(regionSales => regionSales.Region)
-                .WithMany(region => region.regionSales)
-                .HasForeignKey(regionSales => regionSales.region_id);
+            modelBuilder.Entity<Region>()
+                .HasMany(reg => reg.gamePlatforms)
+                .WithMany(gp => gp.regions)
+                .UsingEntity<RegionSales>(
+                    rs => rs.HasOne(rs => rs.GamePlatform).WithMany().HasForeignKey(rs => rs.game_platform_id),
+                    rs => rs.HasOne(rs => rs.Region).WithMany().HasForeignKey(rs => rs.region_id),
+                    rs =>
+                    {
+                        rs.HasKey(rs => new { rs.game_platform_id, rs.region_id});
+                    }
+                );
         }
+
 
         public DbSet<Genre> genre { get; set; }
         public DbSet<Game> game { get; set; }

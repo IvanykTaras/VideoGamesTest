@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Domain.Model
+namespace ApplicationCore.Model
 {
     public class Game
     {

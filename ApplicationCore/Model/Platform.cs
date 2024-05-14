@@ -6,17 +6,15 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Domain.Model
+namespace ApplicationCore.Model
 {
-    public class Game
+    public class Platform
     {
         public int id { get; set; }
-        public int genre_id { get; set; }
-        public string game_name { get; set; }
-        public Genre genre { get; set; }
+        public string platform_name { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]
-        public  ICollection<GamePublisher> gamePublishers { get; set; }
+        public ICollection<GamePlatform> gamePlatforms { get; set; }
     }
 }

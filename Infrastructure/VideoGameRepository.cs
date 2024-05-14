@@ -1,5 +1,5 @@
 ﻿using ApplicationCore.Interface;
-using Domain.Model;
+using ApplicationCore.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,72 +10,15 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class VideoGameRepository: IVideoGameRepository
+    public class VideoGameRepository : IVideoGameRepository
     {
         private readonly ApplicationDbContext _context;
-        public VideoGameRepository(ApplicationDbContext context) { 
+        public VideoGameRepository(ApplicationDbContext context)
+        {
             _context = context;
         }
 
 
-        //--------------------------------------
-        //
-        //  Return all entities
-        //
-        //--------------------------------------
-        public Task<List<GamePlatform>> FindAllGamePlatforms()
-        {
-            return _context.game_platform
-                .Include(game_platform => game_platform.platform)
-                .Include(game_platform => game_platform.gamePublisher)
-                .Include(game_platform => game_platform.regionSales)
-                .ToListAsync();
-        }
-        public Task<List<GamePublisher>> FindAllGamePublishers()
-        {
-            return _context.game_publisher
-                .Include(game_publisher => game_publisher.game)
-                .Include(game_publisher => game_publisher.publisher)
-                .ToListAsync();   
-        }
-        public Task<List<Game>> FindAllGames()
-        {
-            return _context.game
-                .Include(game => game.genre)
-                .Include(game => game.gamePublishers)
-                .ToListAsync();   
-        }
-        public Task<List<Genre>> FindAllGenres()
-        {
-            return _context.genre
-                .Include(genre => genre.games)
-                .ToListAsync();
-        }
-        public Task<List<Platform>> FindAllPlatforms()
-        {
-            return _context.platform
-                .Include( platform => platform.gamePlatforms)
-                .ToListAsync();
-        }
-        public Task<List<Publisher>> FindAllPublishers()
-        {
-            return _context.publisher
-                .Include(publisher => publisher.gamePublishers)
-                .ToListAsync();
-        }
-        public Task<List<Region>> FindAllRegions()
-        {
-            return _context.region
-                .Include(region => region.regionSales)
-                .ToListAsync();
-        }
-        public Task<List<RegionSales>> FindAllRegionSales()
-        {
-            return _context.region_sales
-                .Include(rs => rs.GamePlatform)
-                .Include(rs => rs.Region)
-                .ToListAsync();
-        }
 
 
         //--------------------------------------
@@ -98,7 +41,6 @@ namespace Infrastructure
                 .Where(game_platform => game_platform.id == id)
                 .Include(game_platform => game_platform.platform)
                 .Include(game_platform => game_platform.gamePublisher)
-                .Include(game_platform => game_platform.regionSales)
                 .FirstAsync();
         }
         public Task<GamePublisher> FindGamePublisher(int id)
@@ -134,16 +76,10 @@ namespace Infrastructure
         {
             return _context.region
                 .Where(region => region.id == id)
-                .Include(region => region.regionSales)
+                .Include(r => r.gamePlatforms)
                 .FirstAsync();
         }
-        public Task<RegionSales> FindRegionSales(int region_id, int game_platform_id) {
-            return _context.region_sales
-                .Where(rs => rs.region_id == region_id && rs.game_platform_id == game_platform_id)
-                .Include(rs => rs.GamePlatform)
-                .Include(rs => rs.Region)
-                .FirstAsync();
-        }
+    
 
 
         //--------------------------------------
@@ -157,6 +93,7 @@ namespace Infrastructure
             return _context.game
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(game => game.genre)
                 .Include(game => game.gamePublishers)
                 .ToListAsync();
@@ -166,9 +103,9 @@ namespace Infrastructure
             return _context.game_platform
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(game_platform => game_platform.platform)
                 .Include(game_platform => game_platform.gamePublisher)
-                .Include(game_platform => game_platform.regionSales)
                 .ToListAsync();
         }
         public Task<List<GamePublisher>> FindGamePublisherPage(int page, int size)
@@ -176,6 +113,7 @@ namespace Infrastructure
             return _context.game_publisher
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(game_publisher => game_publisher.game)
                 .Include(game_publisher => game_publisher.publisher)
                 .ToListAsync();
@@ -185,6 +123,7 @@ namespace Infrastructure
             return _context.genre
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(genre => genre.games)
                 .ToListAsync();
         }
@@ -193,6 +132,7 @@ namespace Infrastructure
             return _context.platform
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(platform => platform.gamePlatforms)
                 .ToListAsync();
         }
@@ -201,6 +141,7 @@ namespace Infrastructure
             return _context.publisher
                 .Skip(page)
                 .Take(size)
+                .OrderBy(e => e.id)
                 .Include(publisher => publisher.gamePublishers)
                 .ToListAsync();
         }
@@ -209,16 +150,8 @@ namespace Infrastructure
             return _context.region
                 .Skip(page)
                 .Take(size)
-                .Include(region => region.regionSales)
-                .ToListAsync();
-        }
-        public Task<List<RegionSales>> FindRegionSalesPage(int page, int size)
-        {
-            return _context.region_sales
-                .Skip(page)
-                .Take(size)
-                .Include(rs => rs.GamePlatform)
-                .Include(rs => rs.Region)
+                .OrderBy(e => e.id)
+                .Include(r => r.gamePlatforms)
                 .ToListAsync();
         }
     }
