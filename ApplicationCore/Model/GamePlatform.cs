@@ -19,7 +19,7 @@ namespace ApplicationCore.Model
         public GamePublisher gamePublisher { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public  ICollection<Region> regions { get; set; }
         /*public ICollection<RegionSales> regionSales { get; set; }*/
     }

@@ -17,7 +17,7 @@ namespace ApplicationCore.Model
         public Publisher publisher { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public  ICollection<GamePlatform> gamePlatforms { get; set; }
     }
 }

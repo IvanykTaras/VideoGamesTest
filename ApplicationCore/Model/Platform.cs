@@ -14,7 +14,7 @@ namespace ApplicationCore.Model
         public string platform_name { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public ICollection<GamePlatform> gamePlatforms { get; set; }
     }
 }

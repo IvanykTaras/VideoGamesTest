@@ -16,7 +16,7 @@ namespace ApplicationCore.Model
         public Genre genre { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public  ICollection<GamePublisher> gamePublishers { get; set; }
     }
 }

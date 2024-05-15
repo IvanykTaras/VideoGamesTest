@@ -67,6 +67,58 @@ namespace WebAPI.Controllers
             return _repository.FindRegionPage(page, size);
         }
 
+        //==========================================================================
+        
+
+        [HttpGet("api/games")]
+        public async Task<IActionResult> GetFirstTask([FromQuery] string genre)
+        {
+
+            /*Sports*/
+
+            var games =  _context.game
+                .Include(g => g.genre)
+                .Include(g => g.gamePublishers)
+                    .ThenInclude(gp => gp.publisher)
+                .Include(g => g.gamePublishers)
+                    .ThenInclude(gp => gp.gamePlatforms)
+                    .ThenInclude(gpl => gpl.platform)
+                .Where(g =>  g.genre.genre_name == genre && g.id < 100)
+                .Select(g => new
+                {
+                    g.id,
+                    g.game_name,
+                    PublisherName = g.gamePublishers.FirstOrDefault().publisher.publisher_name,
+                    GamePlatform = g.gamePublishers.FirstOrDefault().gamePlatforms.FirstOrDefault().platform.platform_name,
+                    ReleaseYear = g.gamePublishers.FirstOrDefault().gamePlatforms.FirstOrDefault().release_year,
+                })
+                .ToListAsync();
+
+            return Ok( await games);
+        }
+
+        [HttpGet("/api/games/{id}/sales")]
+        public async Task<IActionResult> GetSecondTask(int id)
+        {
+            var salesData = await _context.game
+                .Include(g => g.gamePublishers)
+                    .ThenInclude(gpub => gpub.gamePlatforms)
+                        .ThenInclude(gpl => gpl.platform)
+                .Include(g => g.gamePublishers)
+                    .ThenInclude(gpub => gpub.gamePlatforms)
+                        .ThenInclude(gpl => gpl.regions)
+                .Where( g => g.id == id)
+                .Select(g => new
+                {
+                    gameId = g.id,
+                    platformId = g.gamePublishers.FirstOrDefault().gamePlatforms.FirstOrDefault().platform_id,
+                    regionId = g.gamePublishers.FirstOrDefault().gamePlatforms.FirstOrDefault().regions.FirstOrDefault().id,
+                    sales = 0
+                })
+                .ToListAsync();
+
+            return Ok(salesData);
+        }
       
     }
 }

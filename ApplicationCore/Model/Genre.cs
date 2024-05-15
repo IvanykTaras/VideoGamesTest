@@ -14,7 +14,7 @@ namespace ApplicationCore.Model
         public string genre_name { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public ICollection<Game> games { get; set; }
     }
 }

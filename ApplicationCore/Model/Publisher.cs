@@ -14,7 +14,7 @@ namespace ApplicationCore.Model
         public string publisher_name { get; set; }
 
         [JsonIgnore]
-        [IgnoreDataMember]
+        /*[IgnoreDataMember]*/
         public ICollection<GamePublisher> gamePublishers { get; set; }
     }
 }
